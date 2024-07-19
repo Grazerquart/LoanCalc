@@ -1,6 +1,6 @@
 {
-    "name": "",
-    "short_name": "",
+    "name": "LoanCalc",
+    "short_name": "LoanCalc",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",

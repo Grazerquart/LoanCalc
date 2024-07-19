@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>APP NAME Coding Challenge by Morote</title>
+    <title>LoanCalc Coding Challenge by Morote</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -35,8 +35,7 @@
     <header>
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/index.html"><img class="nav-logo"
-                        src="/img/Lotus_white.svg">APPNAME</a>
+                <a class="navbar-brand" href="/index.html"><img class="nav-logo" src="/img/Lotus_white.svg">LoanCalc</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
                     aria-label="Toggle navigation">
@@ -54,7 +53,7 @@
                             <a class="nav-link" href="/code.html">Code</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="https://github.com/Grazerquart/">Repo</a>
+                            <a class="nav-link" href="https://github.com/Grazerquart/LoanCalc">Repo</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="https://smorote.com">About</a>
@@ -66,9 +65,52 @@
     </header>
     <main>
         <div class="container mt-5">
-            <input id="message" placeholder="Enter a message" class="form-control">
-            <button type="button" id="btnSubmit" class="btn btn-primary m-2">Display Message</button>
-            <div class="alert alert-primary mt-5 d-none" role="alert" id="alertMessage"></div>
+            <div class="row g-3">
+                <div class="col-12 col-md-3 bg-dark">
+                    <div class="container p-3">
+                        <form class="h-100">
+                            <label class="form-label" for="loan-amount">Loan Amount</label>
+                            <input id="loan-amount" class="form-control" type="number" placeholder="Loan Amount"
+                                value="25000">
+
+                            <label class="form-label" for="loan-months">Term (in months)</label>
+                            <input id="loan-months" class="form-control" type="number" placeholder="Term Length"
+                                value="60">
+
+                            <label class="form-label" for="loan-interest">Interest Rate</label>
+                            <input id="loan-interest" class="form-control" type="number" placeholder="Interest Rate"
+                                value="5">
+
+                            <button onclick="getTable()" class="form-control btn btn-primary mt-3"
+                                type="button">Calculate</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-12 col-md-9">
+                    <div class="container bg-dark h-100 p-3">
+                        <div class="row h-100 justify-content-evenly" id="card-template-target">
+                            <!-- Template Target -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="container bg-dark">
+                        <table class="table table-dark table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Payment</th>
+                                    <th>Principal</th>
+                                    <th>Interest</th>
+                                    <th>Loan Interest</th>
+                                    <th>Balance</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
     <footer class="py-3">
@@ -87,15 +129,33 @@
             </div>
         </div>
     </footer>
+    <template id="payment-card-template">
+        <div class="col-12 text-center justify-content-center">
+            <h3>Your Monthly Payment</h3>
+            <div class="hstack justify-content-center"><h3>$</h3><h3 data-monthly></h3></div>
+        </div>
+        <div class="col-12 col-md-6 text-start">
+            Total Principal
+        </div>
+        <div data-total-principal class="col-12 col-md-6 hstack justify-content-end">
+        </div>
+        <div class="col-12 col-md-6 text-start">
+            Total Interest
+        </div>
+        <div data-total-interest class="col-12 col-md-6 hstack justify-content-end">
+        </div>
+        <div class="col-12 col-md-6 text-start">
+            Total Cost
+        </div>
+        <div data-total-cost class="col-12 col-md-6 hstack justify-content-end">
+        </div>
+    </template>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <!-- My JS -->
     <script src="/js/app.js"></script>
-    <script>
-        document.getElementById("btnSubmit").addEventListener("click", getValues);
-    </script>
 </body>
 
 </html>
