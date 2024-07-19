@@ -35,8 +35,7 @@
     <header>
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/index.html"><img class="nav-logo"
-                        src="/img/Lotus_white.svg">LoanCalc</a>
+                <a class="navbar-brand" href="/index.html"><img class="nav-logo" src="/img/Lotus_white.svg">LoanCalc</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
                     aria-label="Toggle navigation">
@@ -71,19 +70,115 @@
                 <div class="col-12 col-lg-8">
                     <pre class="line-numbers">
                         <code class="language-javascript">
-function getValues(){
-    let messageInput = document.getElementById("message").value;
-    let alertMessage = document.getElementById("alertMessage");
-    alertMessage.innerText = messageInput;
+                            getTable();
+function getTable() {
+  let amount = document.getElementById("loan-amount").value;
+  let term = document.getElementById("loan-months").value;
+  let rate = document.getElementById("loan-interest").value;
+  amount = Number.parseFloat(amount);
+  term = Number.parseInt(term);
+  rate = Number.parseFloat(rate);
+  if (Number.parseFloat(amount) && Number.isInteger(term) && Number.parseFloat(rate)) {
+    // Float, Int, Float
+    let months = calcLoan(amount, term, rate);
+    buildCard(months);
+    buildTable(months);
+  } else {
+    alert("Please input valid number");
+  }
+}
+function calcLoan(amount, term, rate) {
+  let months = [];
+  let rOverM = rate / 1200;
+  let onePlusROverM = 1 + rOverM;
+  let amountTimesrOverM = amount * rOverM;
+  let onePlusROverMExpNegTerm = onePlusROverM ** -term;
+  let monPayment = amountTimesrOverM / (1 - onePlusROverMExpNegTerm);
+  let totalOwed = monPayment * term;
+  // monthZero Object
+  let monthZero = {};
+  monthZero["month"] = 0;
+  monthZero["payment"] = monPayment;
+  monthZero["remBalance"] = amount;
+  monthZero["priPayment"] = 0;
+  monthZero["intPayment"] = 0;
+  monthZero["tInterest"] = 0;
+  monthZero["tOwed"] = totalOwed;
+  months.push(monthZero);
+  for (let i = 1; i <= term; i++) {
+    let curMonth = {};
+    curMonth["month"] = i;
+    curMonth["payment"] = monPayment;
+    curMonth["intPayment"] = months[i - 1].remBalance * rOverM;
+    curMonth["priPayment"] = monPayment - curMonth.intPayment;
+    curMonth["remBalance"] = months[i - 1].remBalance - curMonth.priPayment;
+    curMonth["tInterest"] = months[i - 1].tInterest + curMonth.intPayment;
+    curMonth["tOwed"] = months[i - 1].tOwed - monPayment;
+    months.push(curMonth);
+  }
+  return months;
+}
+function buildCard(data) {
+  // Grab Data
+  let monPayment = data[0].payment.toFixed(2);
+  let totalCost = data[0].tOwed.toFixed(2);
+  let totalInterest = data[data.length - 1].tInterest.toFixed(2);
+  let totalPrincipal = data[0].remBalance.toFixed(2);
+  // Grab Elements
+  let target = document.getElementById("card-template-target");
+  target.innerHTML = "";
+  let template = document.importNode(
+    document.getElementById("payment-card-template").content,
+    true
+  );
+  template.querySelector("[data-monthly]").textContent = monPayment;
+  template.querySelector("[data-total-principal]").textContent =
+    "$" + totalPrincipal;
+  template.querySelector("[data-total-interest]").textContent =
+    "$" + totalInterest;
+  template.querySelector("[data-total-cost]").textContent = "$" + totalCost;
+  target.appendChild(template);
+}
+function buildTable(months) {
+  // Grab Elements
+  let target = document.getElementById("table-row-target");
+  target.innerHTML = "";
+  months.forEach((index) => {
+    let template = document.importNode(
+      document.getElementById("table-row-template").content,
+      true
+    );
+    let month = template.querySelector("[data-month]");
+    let payment = template.querySelector("[data-payment]");
+    let principal = template.querySelector("[data-principal]");
+    let interest = template.querySelector("[data-interest]");
+    let totalInterest = template.querySelector("[data-total-interest]");
+    let balance = template.querySelector("[data-balance]");
+    if (index.month == 0) {
+    } else {
+      month.textContent = index.month;
+      payment.textContent = "$" + index.payment.toFixed(2);
+      principal.textContent = "$" + index.priPayment.toFixed(2);
+      interest.textContent = "$" + index.intPayment.toFixed(2);
+      totalInterest.textContent = "$" + index.tInterest.toFixed(2);
+      balance.textContent = "$" + index.remBalance.toFixed(2);
+      target.appendChild(template);
+    }
+  });
 }
                         </code>
                     </pre>
                 </div>
                 <div class="col-12 col-lg-4">
-                    <h5>getValues</h5>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur atque asperiores doloribus
-                        est corrupti dolor rem sint fuga voluptatum, temporibus, expedita aliquam placeat accusamus
-                        aperiam! Dolore animi esse cupiditate voluptas?</p>
+                    <h5>gettable</h5>
+                    <p>Here we grab and validate user input to ensure only numbers are passed to the rest of the functions. 
+                    </p>
+                    <h5>calcLoan</h5>
+                    <p>This function does most of the work, doing the math and building an array that holds each month and it's values as an object.</p>
+                    <h5>Buildcard</h5>
+                    <p>This function builds the card HTML from the template I wrote into the app page</p>
+                    <h5>Buildtable</h5>
+                    <p>This function builds the table HTML from the template I wrote into the app page</p>
                 </div>
             </div>
         </div>
