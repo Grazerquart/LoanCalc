@@ -6,7 +6,11 @@ function getTable() {
   amount = Number.parseFloat(amount);
   term = Number.parseInt(term);
   rate = Number.parseFloat(rate);
-  if (Number.parseFloat(amount) && Number.isInteger(term) && Number.parseFloat(rate)) {
+  if (
+    Number.parseFloat(amount) &&
+    Number.isInteger(term) &&
+    Number.parseFloat(rate)
+  ) {
     // Float, Int, Float
     let months = calcLoan(amount, term, rate);
     buildCard(months);
@@ -89,7 +93,7 @@ function buildTable(months) {
       principal.textContent = "$" + index.priPayment.toFixed(2);
       interest.textContent = "$" + index.intPayment.toFixed(2);
       totalInterest.textContent = "$" + index.tInterest.toFixed(2);
-      balance.textContent = "$" + index.remBalance.toFixed(2);
+      balance.textContent = "$" + Math.abs(index.remBalance.toFixed(2));
       target.appendChild(template);
     }
   });

@@ -161,7 +161,7 @@ function buildTable(months) {
       principal.textContent = "$" + index.priPayment.toFixed(2);
       interest.textContent = "$" + index.intPayment.toFixed(2);
       totalInterest.textContent = "$" + index.tInterest.toFixed(2);
-      balance.textContent = "$" + index.remBalance.toFixed(2);
+      balance.textContent = "$" + Math.abs(index.remBalance.toFixed(2));
       target.appendChild(template);
     }
   });
